@@ -1,61 +1,142 @@
-import java.util.Arrays;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class StudentMarksAnalysis {
+class Product {
+    private int productID;
+    private String name;
+    private double price;
+    private int quantity;
+
+    // Constructor
+    public Product(int productID, String name, double price, int quantity) {
+        this.productID = productID;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    // Calculate total value of product (price * quantity)
+    public double totalValue() {
+        return price * quantity;
+    }
+
+    // Getters for searching
+    public int getProductID() {
+        return productID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    // Display product details
+    public void displayProduct() {
+        System.out.printf("ID: %d | Name: %s | Price: %.2f | Quantity: %d | Total Value: %.2f\n", 
+                          productID, name, price, quantity, totalValue());
+    }
+}
+
+class Inventory {
+    private ArrayList<Product> products = new ArrayList<>();
+
+    // Add product to inventory
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+    // Display all products
+    public void displayAllProducts() {
+        if (products.isEmpty()) {
+            System.out.println("No products in inventory.");
+            return;
+        }
+        System.out.println("Inventory List:");
+        for (Product product : products) {
+            product.displayProduct();
+        }
+    }
+
+    // Calculate total inventory value
+    public double totalInventoryValue() {
+        double total = 0;
+        for (Product product : products) {
+            total += product.totalValue();
+        }
+        return total;
+    }
+
+    // Method Overloading: Search product by ID
+    public Product searchProduct(int productID) {
+        for (Product product : products) {
+            if (product.getProductID() == productID) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+    // Method Overloading: Search product by Name
+    public Product searchProduct(String name) {
+        for (Product product : products) {
+            if (product.getName().equalsIgnoreCase(name)) {
+                return product;
+            }
+        }
+        return null;
+    }
+}
+
+// Main Class
+public class InventoryManager {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Inventory inventory = new Inventory();
 
-        // Get number of students
-        System.out.print("Enter the number of students: ");
-        int n = scanner.nextInt();
-        int[] marks = new int[n];
+        // Adding products
+        inventory.addProduct(new Product(101, "Laptop", 75000, 5));
+        inventory.addProduct(new Product(102, "Smartphone", 30000, 10));
+        inventory.addProduct(new Product(103, "Tablet", 20000, 7));
 
-        // Input marks
-        System.out.println("Enter marks for " + n + " students (out of 100):");
-        for (int i = 0; i < n; i++) {
-            marks[i] = scanner.nextInt();
+        // Display all products
+        inventory.displayAllProducts();
+
+        // Calculate and display total inventory value
+        System.out.printf("\nTotal Inventory Value: %.2f\n", inventory.totalInventoryValue());
+
+        // Search for a product by ID
+        int searchID = 102;
+        Product foundByID = inventory.searchProduct(searchID);
+        if (foundByID != null) {
+            System.out.println("\nProduct found by ID:");
+            foundByID.displayProduct();
+        } else {
+            System.out.println("\nProduct with ID " + searchID + " not found.");
         }
 
-        // (a) Calculate class average
-        double sum = Arrays.stream(marks).sum();
-        double average = sum / n;
-
-        // (b) Find highest and lowest marks
-        int highest = Arrays.stream(marks).max().getAsInt();
-        int lowest = Arrays.stream(marks).min().getAsInt();
-
-        // (c) Count students above and below average
-        long aboveAverage = Arrays.stream(marks).filter(mark -> mark > average).count();
-        long belowAverage = Arrays.stream(marks).filter(mark -> mark < average).count();
-
-        // (d) Sort marks in descending order
-        Arrays.sort(marks);
-        int[] descendingMarks = new int[n];
-        for (int i = 0; i < n; i++) {
-            descendingMarks[i] = marks[n - 1 - i]; // Reverse sorted order
+        // Search for a product by Name
+        String searchName = "Laptop";
+        Product foundByName = inventory.searchProduct(searchName);
+        if (foundByName != null) {
+            System.out.println("\nProduct found by Name:");
+            foundByName.displayProduct();
+        } else {
+            System.out.println("\nProduct with name '" + searchName + "' not found.");
         }
-
-        // Output results
-        System.out.printf("\nClass Average: %.2f\n", average);
-        System.out.println("Highest Mark: " + highest);
-        System.out.println("Lowest Mark: " + lowest);
-        System.out.println("Students Above Average: " + aboveAverage);
-        System.out.println("Students Below Average: " + belowAverage);
-        System.out.println("Marks in Descending Order: " + Arrays.toString(descendingMarks));
     }
 }
 
 
 
+
 //output
 
-Enter the number of students: 5
-Enter marks for 5 students (out of 100):
-85 76 92 60 45
+Inventory List:
+ID: 101 | Name: Laptop | Price: 75000.00 | Quantity: 5 | Total Value: 375000.00
+ID: 102 | Name: Smartphone | Price: 30000.00 | Quantity: 10 | Total Value: 300000.00
+ID: 103 | Name: Tablet | Price: 20000.00 | Quantity: 7 | Total Value: 140000.00
 
-Class Average: 71.60
-Highest Mark: 92
-Lowest Mark: 45
-Students Above Average: 2
-Students Below Average: 3
-Marks in Descending Order: [92, 85, 76, 60, 45]
+Total Inventory Value: 815000.00
+
+Product found by ID:
+ID: 102 | Name: Smartphone | Price: 30000.00 | Quantity: 10 | Total Value: 300000.00
+
+Product found by Name:
+ID: 101 | Name: Laptop | Price: 75000.00 | Quantity: 5 | Total Value: 375000.00
