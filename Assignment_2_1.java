@@ -93,3 +93,21 @@ public class VehicleRentalSystem {
         System.out.println("Rental Cost for 4 days: $" + truck.calculateRentalCost(4));
     }
 }
+
+
+
+
+
+//output
+
+Rental Costs:
+ID: C101, Model: Toyota Corolla, Rental Rate: 100.0
+Car Type: Sedan
+Rental Cost for 6 days: $540.0
+
+ID: B202, Model: Yamaha R15, Rental Rate: 50.0
+Rental Cost for 3 days: $150.0
+
+ID: T303, Model: Volvo Truck, Rental Rate: 200.0
+Load Capacity: 5.0 tons
+Rental Cost for 4 days: $1200.0
